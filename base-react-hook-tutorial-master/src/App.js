@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 import './App.scss';
 import Nav from './components/navigation/Nav';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,37 +11,34 @@ import {
 import Login from './components/login/login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from './components/register/register';
-import {ToastContainer, toast } from 'react-toastify';
+import User from './components/user/user';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import _ from 'lodash';
+import AppRoutes from './components/routes/AppRoutes';
+import { Audio } from 'react-loader-spinner'
+import { UserContext } from './context/UserContext';
+import { useContext } from 'react';
 function App() {
+  const { user } = useContext(UserContext);
+  console.log(24, user);
   return (
-    <Router>
-      <div className='app-container'>
-        {/* <Nav/> */}
-        <Switch>
-          <Route path="/news">
-            news
-          </Route>
-          <Route path="/about">
-            about
-          </Route>
-          <Route path="/contact">
-            contact
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/" exact>
-            home
-          </Route>
-          <Route path="*">
-            404 Not Found
-          </Route>
-        </Switch>
-      </div>
+    <>
+      <Router>
+        {user && user.isLoading == true ? <Audio
+          heigth="100"
+          width="100"
+          color='grey'
+          ariaLabel='loading'
+        /> : <>
+          <div className='appHeader'>
+            <Nav />
+          </div>
+          <div className='app-container'>
+            <AppRoutes />
+          </div></>}
+
+      </Router>
       <ToastContainer
         position="bottom-center"
         autoClose={5000}
@@ -55,7 +52,7 @@ function App() {
         theme="light"
       />
       {/* Same as */}
-    </Router>
+    </>
   );
 }
 

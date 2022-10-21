@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { ToastContainer, toast } from 'react-toastify';
-
+import { registerNewUser } from "../service/userService";
 
 const Register = (props) => {
     let history = useHistory()
@@ -67,9 +67,20 @@ const Register = (props) => {
               
             return true
     }
-    const handleRegister = () => {
+    const handleRegister =async () => {
         let check=isValidateInput();
-        let userData = { email, phone, username, password }
+        if(check==true){
+           let response=await registerNewUser( email,phone,username,password)
+           let serverData=response.data
+           if(+serverData.errorcode==0){
+            toast.success(serverData.message)
+            history.push("/login")
+           }
+           else{
+            toast.error(serverData.message)
+           }
+           console.log(response);
+        }
 
     }
     return (
